@@ -10,9 +10,10 @@ Key Features
 As the current product is a work in progress, we hope on delivering the following features:
 
 1. Canvas Integration
-2. Day-2-Day Organizer
-⋅⋅⋅⋅* Based on the calendar everyone knows with (potentially) some customization features to make it less 'bland' and make it more personal.
+  - Grabs all of your assignments for your viewing and note taking!
+3. Day-2-Day Organizer
+  - Based on the calendar everyone knows with (potentially) some customization features to make it less 'bland' and make it more personal.
 3. Task Notes
-⋅⋅⋅⋅* Create your own notes for indiviual items or have them there for that day.
+  - Create your own notes for indiviual items or have them there for that day.
 4. Application
-⋅⋅⋅⋅* Use it as either an executible on your local machine or use it on the web! (HEAVY WORK IN PROGRESS)
+  - Use it as either an executible on your local machine or use it on the web! **(HEAVY WORK IN PROGRESS)**
