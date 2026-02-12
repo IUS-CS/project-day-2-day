@@ -1,5 +1,5 @@
-## Roles
-+ Laken Hollen - 
-+ Evan Knieriem - 
-+ Lucia Martinez-Segundo - 
-+ Evgeniy Vodolazov - 
+## Names - Roles
++ Laken Hollen - Does everything
++ Evan Knieriem - Does Everything
++ Lucia Martinez-Segundo - Does everything
++ Evgeniy Vodolazov - Does everything
