@@ -11,7 +11,7 @@ As the current product is a work in progress, we hope on delivering the followin
 
 1. Canvas Integration
   - Grabs all of your assignments for your viewing and note taking!
-3. Day-2-Day Organizer
+2. Day-2-Day Organizer
   - Based on the calendar everyone knows with (potentially) some customization features to make it less 'bland' and make it more personal.
 3. Task Notes
   - Create your own notes for indiviual items or have them there for that day.
