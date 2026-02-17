@@ -1,0 +1,35 @@
+# Node dependencies
+node_modules/
+
+# Build output
+out/
+dist/
+build/
+
+# Electron packaging
+*.exe
+*.asar
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# SQLite database files
+*.sqlite
+*.sqlite3
+*.db
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE/editor files
+.vscode/
+.idea/
