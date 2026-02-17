@@ -1,1 +1,40 @@
-<!-- Home page for prototype, will be expanded-->
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<div style="display:flex; gap:20px;">
+
+    <!-- Assignments Card -->
+    <div style="background:white; padding:20px; border:1px solid #ddd; width:33%; border-radius:6px;">
+        <h3>Upcoming Assignments</h3>
+        <hr>
+        <p><strong>C346 Proposal</strong><br>
+        Due: Jan 30<br>
+        Status: In Progress</p>
+
+        <p><strong>Canvas API Research</strong><br>
+        Due: Feb 2<br>
+        Status: Not Started</p>
+    </div>
+
+    <!-- Notes Card -->
+    <div style="background:white; padding:20px; border:1px solid #ddd; width:33%; border-radius:6px;">
+        <h3>Notes</h3>
+        <hr>
+        <p>• Review formatting before submission.</p>
+        <p>• Confirm authentication method for Canvas API.</p>
+    </div>
+
+    <!-- Reminders Card -->
+    <div style="background:white; padding:20px; border:1px solid #ddd; width:33%; border-radius:6px;">
+        <h3>Reminders</h3>
+        <hr>
+        <p>🔔 1 day before due date</p>
+        <p>🔔 2 days before due date</p>
+    </div>
+
+</div>
+
+{% endblock %}
