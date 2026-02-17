@@ -1,1 +1,33 @@
-<!-- Main HTML layout for the application-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Day-2-Day{% endblock %}</title>
+</head>
+
+<body style="margin:0; font-family: Arial, sans-serif; background-color:#f5f6f8;">
+
+<div style="display:flex; min-height:100vh;">
+
+    <!-- Sidebar -->
+    <div style="width:220px; background-color:white; padding:20px; border-right:1px solid #ddd;">
+        <h2 style="margin-top:0;">Day-2-Day</h2>
+        <hr>
+        <p><a href="{{ url_for('index') }}">Dashboard</a></p>
+        <p><a href="{{ url_for('calendar_view') }}">Calendar</a></p>
+    </div>
+
+    <!-- Main Content -->
+    <div style="flex:1; padding:30px;">
+        <!-- Normal heading, NOT a block -->
+        <h1 style="margin-top:0;">Day-2-Day App</h1>
+        <hr>
+
+        {% block content %}
+        {% endblock %}
+    </div>
+
+</div>
+
+</body>
+</html>
