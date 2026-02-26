@@ -1,3 +1,94 @@
-/*  Placeholder for future sprints,  
-    Will contain basic styling and then updated for detail
-*/
+/* =========================
+   Global defaults
+   ========================= */
+:root {
+  /* Default calendar background variables (JS updates these) */
+  --calendar-bg: #f6f7fb;
+  --calendar-bg-image: none;
+
+  /* UI colors */
+  --text-color: #111827;
+  --muted-text: #374151;
+
+  /* Control bar styling */
+  --control-bg: rgba(255, 255, 255, 0.88);
+  --control-border: rgba(0, 0, 0, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--text-color);
+}
+
+/* =========================
+   Calendar page background
+   ========================= */
+#calendar-page {
+  min-height: 100vh;
+  padding-top: 10px;
+
+  /* These variables get changed by JS */
+  background: var(--calendar-bg, #f6f7fb);
+  background-image: var(--calendar-bg-image, none);
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* =========================
+   Controls (dropdown bar)
+   ========================= */
+.calendar-controls {
+  padding: 12px 16px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+
+  /* Keep readable on colored backgrounds */
+  background: var(--control-bg);
+  border: 1px solid var(--control-border);
+  border-radius: 10px;
+  width: fit-content;
+
+  /* Space from edges */
+  margin: 12px 16px;
+}
+
+.calendar-controls label {
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.calendar-controls select {
+  padding: 4px 8px;
+  border-radius: 8px;
+  border: 1px solid var(--control-border);
+  background: #ffffff;
+  color: var(--text-color);
+}
+
+/* =========================
+   Calendar content placeholder
+   ========================= */
+.calendar-content {
+  padding: 16px;
+}
+
+.calendar-content h2 {
+  margin: 0 0 10px 0;
+  font-size: 32px;
+  line-height: 1.2;
+}
+
+.calendar-content p {
+  margin: 0;
+  color: var(--muted-text);
+  font-size: 16px;
+}
