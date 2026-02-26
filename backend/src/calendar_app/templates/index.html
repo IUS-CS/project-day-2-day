@@ -10,21 +10,113 @@
     <div style="background:white; padding:20px; border:1px solid #ddd; width:33%; border-radius:6px;">
         <h3>Upcoming Assignments</h3>
         <hr>
-        <p><strong>C346 Proposal</strong><br>
-        Due: Jan 30<br>
-        Status: In Progress</p>
 
-        <p><strong>Canvas API Research</strong><br>
-        Due: Feb 2<br>
-        Status: Not Started</p>
+        <div style="margin-bottom:15px; padding:10px; background:#f8f9fa; border-radius:4px;">
+            <p style="margin:0;"><strong>C346 Proposal</strong><br>
+            Due: Jan 30<br>
+            Status: In Progress<br>
+            <a href="/?task_id=1" style="font-size:12px; color:#007bff;">View Notes ({{ notes|selectattr('task_id', 'equalto', 1)|list|length }})</a>
+            </p>
+        </div>
+
+        <div style="padding:10px; background:#f8f9fa; border-radius:4px;">
+            <p style="margin:0;"><strong>Canvas API Research</strong><br>
+            Due: Feb 2<br>
+            Status: Not Started<br>
+            <a href="/?task_id=2" style="font-size:12px; color:#007bff;">View Notes ({{ notes|selectattr('task_id', 'equalto', 2)|list|length }})</a>
+            </p>
+        </div>
     </div>
 
     <!-- Notes Card -->
     <div style="background:white; padding:20px; border:1px solid #ddd; width:33%; border-radius:6px;">
         <h3>Notes</h3>
+
+        <!-- Search and Filter Bar -->
+        <div style="margin-bottom:15px;">
+            <form method="GET" style="display:flex; gap:5px;">
+                <input type="text"
+                       name="search"
+                       placeholder="Search notes..."
+                       value="{{ search_query }}"
+                       style="flex:1; padding:6px; border:1px solid #ddd; border-radius:4px; font-size:13px;">
+                <button type="submit"
+                        style="padding:6px 12px; background:#6c757d; color:white; border:none; border-radius:4px; cursor:pointer; font-size:13px;">
+                    Search
+                </button>
+            </form>
+
+            {% if current_filter or search_query %}
+                <a href="/" style="font-size:12px; color:#007bff; margin-top:5px; display:inline-block;">Clear filters</a>
+            {% endif %}
+        </div>
+
         <hr>
-        <p>• Review formatting before submission.</p>
-        <p>• Confirm authentication method for Canvas API.</p>
+
+        {% if notes %}
+            {% for note in notes %}
+                <div style="margin-bottom:12px; padding:8px; background:#f8f9fa; border-radius:4px;" id="note-{{ note.id }}">
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                        <div style="flex:1;">
+                            <p style="margin:0; font-size:14px;" class="note-content-{{ note.id }}">• {{ note.content }}</p>
+                            <small style="color:#6c757d;">Task #{{ note.task_id }}</small>
+                        </div>
+                        <div style="display:flex; gap:8px;">
+                            <button onclick="toggleEdit({{ note.id }})"
+                                    style="color:#007bff; background:none; border:none; cursor:pointer; font-size:12px; padding:2px;">
+                                ✎
+                            </button>
+                            <a href="/delete-note/{{ note.id }}"
+                               style="color:red; text-decoration:none; font-size:12px;"
+                               onclick="return confirm('Delete this note?')">
+                                ✕
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Hidden edit form -->
+                    <form method="POST" action="/edit-note/{{ note.id }}"
+                          style="display:none; margin-top:8px;"
+                          class="edit-form-{{ note.id }}">
+                        <input type="text"
+                               name="content"
+                               value="{{ note.content }}"
+                               style="width:80%; padding:6px; border:1px solid #ddd; border-radius:4px; font-size:13px;"
+                               required>
+                        <button type="submit"
+                                style="padding:6px 10px; background:#28a745; color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;">
+                            Save
+                        </button>
+                        <button type="button"
+                                onclick="toggleEdit({{ note.id }})"
+                                style="padding:6px 10px; background:#6c757d; color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;">
+                            Cancel
+                        </button>
+                    </form>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p style="color:#888;">No notes found.</p>
+        {% endif %}
+
+        <!-- Add Note Form -->
+        <form method="POST" action="/add-note" style="margin-top:15px;">
+            <select name="task_id" style="padding:8px; border:1px solid #ddd; border-radius:4px; margin-bottom:8px; font-size:13px;">
+                <option value="1">C346 Proposal</option>
+                <option value="2">Canvas API Research</option>
+            </select>
+            <div style="display:flex; gap:5px;">
+                <input type="text"
+                       name="content"
+                       placeholder="Add a new note..."
+                       style="flex:1; padding:8px; border:1px solid #ddd; border-radius:4px;"
+                       required>
+                <button type="submit"
+                        style="padding:8px 12px; background:#007bff; color:white; border:none; border-radius:4px; cursor:pointer;">
+                    Add
+                </button>
+            </div>
+        </form>
     </div>
 
     <!-- Reminders Card -->
@@ -36,5 +128,20 @@
     </div>
 
 </div>
+
+<script>
+function toggleEdit(noteId) {
+    const content = document.querySelector('.note-content-' + noteId);
+    const form = document.querySelector('.edit-form-' + noteId);
+
+    if (form.style.display === 'none') {
+        content.style.display = 'none';
+        form.style.display = 'block';
+    } else {
+        content.style.display = 'block';
+        form.style.display = 'none';
+    }
+}
+</script>
 
 {% endblock %}
