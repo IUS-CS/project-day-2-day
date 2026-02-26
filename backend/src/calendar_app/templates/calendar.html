@@ -3,6 +3,28 @@
 {% block title %}Calendar{% endblock %}
 
 {% block content %}
+<<<<<<< HEAD
+<div id="calendar-page">
+  <div class="calendar-controls">
+    <label for="calendarBackground">Calendar Background:</label>
+    <select id="calendarBackground">
+      <option value="default">Default</option>
+      <option value="soft">Soft Gray</option>
+      <option value="blue">Soft Blue</option>
+      <option value="pink">Pink</option>
+      <option value="green">Green</option>
+      <option value="red">Red</option>
+    </select>
+  </div>
+
+  <div class="calendar-content">
+    <h2>Calendar</h2>
+    <p>Calendar UI will go here.</p>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='calendar_background.js') }}"></script>
+=======
 
 <h2>Calendar View</h2>
 <p>This is a placeholder calendar for your prototype.</p>
@@ -11,4 +33,5 @@
     <li>Feb 2 – Canvas API Research</li>
 </ul>
 
+>>>>>>> origin/main
 {% endblock %}
