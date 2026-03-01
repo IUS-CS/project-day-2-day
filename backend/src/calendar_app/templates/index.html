@@ -4,6 +4,19 @@
 
 {% block content %}
 
+<!-- Notifications Banner (if any urgent) -->
+{% if notification_counts.overdue > 0 or notification_counts.due_today > 0 %}
+<div style="background:#fff3cd; border:1px solid #ffc107; padding:12px; border-radius:6px; margin-bottom:20px;">
+    <strong>⚠️ You have urgent tasks!</strong>
+    {% if notification_counts.overdue > 0 %}
+        <span style="color:#dc3545;">{{ notification_counts.overdue }} overdue</span>
+    {% endif %}
+    {% if notification_counts.due_today > 0 %}
+        <span style="color:#ffc107;">{{ notification_counts.due_today }} due today</span>
+    {% endif %}
+</div>
+{% endif %}
+
 <div style="display:flex; gap:20px;">
 
     <!-- Assignments Card -->
@@ -11,21 +24,17 @@
         <h3>Upcoming Assignments</h3>
         <hr>
 
+        {% for task in tasks %}
         <div style="margin-bottom:15px; padding:10px; background:#f8f9fa; border-radius:4px;">
-            <p style="margin:0;"><strong>C346 Proposal</strong><br>
-            Due: Jan 30<br>
-            Status: In Progress<br>
-            <a href="/?task_id=1" style="font-size:12px; color:#007bff;">View Notes ({{ notes|selectattr('task_id', 'equalto', 1)|list|length }})</a>
+            <p style="margin:0;"><strong>{{ task.name }}</strong><br>
+            Due: {{ task.due_date.strftime('%b %d') }}<br>
+            Status: {{ task.status }}<br>
+            <a href="/?task_id={{ task.id }}" style="font-size:12px; color:#007bff;">
+                View Notes ({{ notes|selectattr('task_id', 'equalto', task.id)|list|length }})
+            </a>
             </p>
         </div>
-
-        <div style="padding:10px; background:#f8f9fa; border-radius:4px;">
-            <p style="margin:0;"><strong>Canvas API Research</strong><br>
-            Due: Feb 2<br>
-            Status: Not Started<br>
-            <a href="/?task_id=2" style="font-size:12px; color:#007bff;">View Notes ({{ notes|selectattr('task_id', 'equalto', 2)|list|length }})</a>
-            </p>
-        </div>
+        {% endfor %}
     </div>
 
     <!-- Notes Card -->
@@ -67,8 +76,7 @@
                                 ✎
                             </button>
                             <a href="/delete-note/{{ note.id }}"
-                               style="color:red; text-decoration:none; font-size:12px;"
-                               onclick="return confirm('Delete this note?')">
+                               style="color:red; text-decoration:none; font-size:12px;">
                                 ✕
                             </a>
                         </div>
@@ -102,8 +110,9 @@
         <!-- Add Note Form -->
         <form method="POST" action="/add-note" style="margin-top:15px;">
             <select name="task_id" style="padding:8px; border:1px solid #ddd; border-radius:4px; margin-bottom:8px; font-size:13px;">
-                <option value="1">C346 Proposal</option>
-                <option value="2">Canvas API Research</option>
+                {% for task in tasks %}
+                <option value="{{ task.id }}">{{ task.name }}</option>
+                {% endfor %}
             </select>
             <div style="display:flex; gap:5px;">
                 <input type="text"
@@ -119,12 +128,32 @@
         </form>
     </div>
 
-    <!-- Reminders Card -->
+    <!-- Notifications Card -->
     <div style="background:white; padding:20px; border:1px solid #ddd; width:33%; border-radius:6px;">
-        <h3>Reminders</h3>
+        <h3>Notifications</h3>
         <hr>
-        <p>🔔 1 day before due date</p>
-        <p>🔔 2 days before due date</p>
+
+        {% if notifications %}
+            {% for notification in notifications %}
+                <div style="padding:10px; margin-bottom:10px; background:#f8f9fa; border-left:4px solid {{ notification.color }}; border-radius:4px;">
+                    <p style="margin:0; font-size:14px;">
+                        <span style="font-size:16px;">{{ notification.icon }}</span>
+                        {{ notification.message }}
+                    </p>
+                    <small style="color:#6c757d;">{{ notification.task.due_date.strftime('%b %d, %Y') }}</small>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p style="color:#888;">🎉 No urgent notifications!</p>
+        {% endif %}
+
+        <!-- Notification Summary -->
+        <div style="margin-top:15px; padding:10px; background:#e7f3ff; border-radius:4px; font-size:13px;">
+            <strong>Summary:</strong><br>
+            🔴 {{ notification_counts.overdue }} Overdue<br>
+            ⚠️ {{ notification_counts.due_today }} Due Today<br>
+            🔔 {{ notification_counts.due_soon }} Due Soon
+        </div>
     </div>
 
 </div>
