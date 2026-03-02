@@ -1,9 +1,3 @@
-#app.py
-# This does the initiliazation and execution of the application
-# Uses Flask for it all.
-# Important note: Serves as the primary backend service for the the application
-# Delivers frontend pages as well.
-
 from flask import Flask, render_template
 
 def create_app():
@@ -18,6 +12,11 @@ def create_app():
     @app.route("/calendar")
     def calendar_view():
         return render_template("calendar.html")
+
+    # Calendar grid route
+    @app.route("/calendar/grid")
+    def calendar_grid_view():
+        return render_template("calendar_grid.html")
 
     return app
 
