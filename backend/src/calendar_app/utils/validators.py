@@ -58,3 +58,25 @@ def validate_email(email: str) -> bool:
 
     pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
     return bool(re.match(pattern, email))
+
+
+def validate_note_content(content: str) -> bool:
+    """
+    Validate note content.
+
+    Args:
+        content: Note content to validate
+
+    Returns:
+        True if valid, False otherwise
+
+    Rules:
+        - Not empty or only whitespace
+        - Maximum 5000 characters
+
+    """
+    if not content or not isinstance(content, str):
+        return False
+
+    content = content.strip()
+    return 1 <= len(content) <= 5000
