@@ -4,6 +4,10 @@
 # Important note: Serves as the primary backend service for the application
 # Delivers frontend pages as well.
 
+from flask import Flask
+from backend.src.calendar_app.routes.main_routes import main_bp
+from backend.src.calendar_app.routes.notes_routes import notes_bp
+
 from flask import Flask, render_template
 
 # Import blueprint factories
@@ -20,6 +24,7 @@ from calendar_app.logic.profile_service import ProfileService
 
 
 def create_app():
+    """Create and configure the Flask application."""
     app = Flask(__name__)
 
     # Instantiate repositories
@@ -38,11 +43,14 @@ def create_app():
     @app.route("/")
     def index():
         return render_template("index.html")
+    # Register blueprints
+    app.register_blueprint(main_bp)
+    app.register_blueprint(notes_bp)
 
-    # Calendar route
-    @app.route("/calendar")
-    def calendar_view():
-        return render_template("calendar.html")
+    # Calendar grid route
+    @app.route("/calendar/grid")
+    def calendar_grid_view():
+        return render_template("calendar_grid.html")
 
     return app
 

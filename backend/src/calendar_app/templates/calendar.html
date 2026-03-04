@@ -1,14 +1,35 @@
 {% extends "base.html" %}
-
 {% block title %}Calendar{% endblock %}
 
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='calendar_grid.css') }}">
+{% endblock %}
+
 {% block content %}
+<div>
+  <div class="cal-header">
+    <button id="prevBtn" class="btn" type="button">←</button>
+    <h2 id="monthLabel" class="month-label">Month YYYY</h2>
+    <button id="nextBtn" class="btn" type="button">→</button>
+    <div class="spacer"></div>
+    <button id="todayBtn" class="btn" type="button">Today</button>
+  </div>
 
-<h2>Calendar View</h2>
-<p>This is a placeholder calendar for your prototype.</p>
-<ul>
-    <li>Jan 30 – C346 Proposal</li>
-    <li>Feb 2 – Canvas API Research</li>
-</ul>
+  <div class="weekday-row">
+    <div class="weekday">Sun</div><div class="weekday">Mon</div><div class="weekday">Tue</div>
+    <div class="weekday">Wed</div><div class="weekday">Thu</div><div class="weekday">Fri</div>
+    <div class="weekday">Sat</div>
+  </div>
 
+  <div id="grid" class="month-grid"></div>
+
+  <div class="details">
+    <h3 class="details-title">Selected Day</h3>
+    <div id="detailsBody" class="details-body">Click a day to view events.</div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='calendar_grid.js') }}"></script>
 {% endblock %}
