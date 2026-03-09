@@ -1,7 +1,9 @@
 from flask import Blueprint, render_template, request
 from datetime import datetime, timedelta
-from backend.src.calendar_app.logic.Notifications import Notifications
-from backend.src.calendar_app.routes.notes_routes import get_note_manager
+from calendar_app.logic.Notifications import Notifications
+
+# FIX: import the shared note_manager instance instead of get_note_manager
+from calendar_app.routes.notes_routes import note_manager
 
 # Create blueprint
 main_bp = Blueprint('main', __name__)
@@ -35,8 +37,6 @@ SAMPLE_TASKS = [
 @main_bp.route("/")
 def index():
     """Dashboard home page with notes and notifications."""
-    # Get note manager from notes blueprint
-    note_manager = get_note_manager()
 
     # Get filter and search parameters
     task_filter = request.args.get("task_id", type=int)
@@ -50,17 +50,19 @@ def index():
     else:
         notes = note_manager.get_all_notes()
 
-    # Get notifications for tasks
+    # Notifications
     notifications = notification_service.get_notifications_for_tasks(SAMPLE_TASKS)
     notification_counts = notification_service.count_notifications(SAMPLE_TASKS)
 
-    return render_template("index.html",
-                           notes=notes,
-                           tasks=SAMPLE_TASKS,
-                           notifications=notifications,
-                           notification_counts=notification_counts,
-                           current_filter=task_filter,
-                           search_query=search_query)
+    return render_template(
+        "index.html",
+        notes=notes,
+        tasks=SAMPLE_TASKS,
+        notifications=notifications,
+        notification_counts=notification_counts,
+        current_filter=task_filter,
+        search_query=search_query
+    )
 
 
 @main_bp.route("/calendar")

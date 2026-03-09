@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional
-from backend.src.calendar_app.utils.validators import validate_note_content
+from calendar_app.utils.validators import validate_note_content
 
 
 class Note:
@@ -8,10 +8,9 @@ class Note:
     Represents a note attached to a task.
 
     Attributes:
-        id: Unique identifier for the note
+        note_id: Unique identifier for the note
         task_id: ID of the task this note belongs to
         content: The text content of the note
-
     """
 
     def __init__(self, task_id: int, content: str, note_id: Optional[int] = None):
@@ -26,7 +25,7 @@ class Note:
         if not validate_note_content(content):
             raise ValueError("Invalid note content")
 
-        self.id = note_id
+        self.note_id = note_id        # <-- FIXED: was self.id
         self.task_id = task_id
         self.content = content.strip()
         self.created_at = datetime.now()
@@ -42,7 +41,7 @@ class Note:
     def to_dict(self) -> dict:
         """Convert note to dictionary representation."""
         return {
-            'id': self.id,
+            'id': self.note_id,  # <-- FIXED to match new attribute
             'task_id': self.task_id,
             'content': self.content,
             'created_at': self.created_at.isoformat(),
@@ -55,7 +54,7 @@ class Note:
         note = cls(
             task_id=data['task_id'],
             content=data['content'],
-            note_id=data.get('id')
+            note_id=data.get('id')  # <-- FIXED to match new attribute
         )
 
         if 'created_at' in data:
