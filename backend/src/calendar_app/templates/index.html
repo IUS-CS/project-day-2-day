@@ -19,22 +19,92 @@
 
 <div style="display:flex; gap:20px;">
 
-    <!-- Assignments Card -->
+    <!-- Assignments Card with Filters -->
     <div style="background:white; padding:20px; border:1px solid #ddd; width:33%; border-radius:6px;">
-        <h3>Upcoming Assignments</h3>
+        <h3>Assignments</h3>
+
+        <!-- Task Filters -->
+        <form method="GET" style="margin-bottom:15px; padding:10px; background:#f8f9fa; border-radius:4px;">
+
+            <!-- Quick Filters -->
+            <div style="margin-bottom:10px;">
+                <strong style="font-size:13px;">Quick Filters:</strong><br>
+                <div style="display:flex; gap:5px; margin-top:5px;">
+                    <a href="/"
+                       style="padding:4px 8px; background:{% if not task_quick_filter %}#007bff{% else %}#e9ecef{% endif %}; color:{% if not task_quick_filter %}white{% else %}#333{% endif %}; text-decoration:none; border-radius:3px; font-size:12px;">
+                        All
+                    </a>
+                    <a href="/?task_filter=overdue"
+                       style="padding:4px 8px; background:{% if task_quick_filter == 'overdue' %}#dc3545{% else %}#e9ecef{% endif %}; color:{% if task_quick_filter == 'overdue' %}white{% else %}#333{% endif %}; text-decoration:none; border-radius:3px; font-size:12px;">
+                        Overdue
+                    </a>
+                    <a href="/?task_filter=today"
+                       style="padding:4px 8px; background:{% if task_quick_filter == 'today' %}#ffc107{% else %}#e9ecef{% endif %}; color:{% if task_quick_filter == 'today' %}white{% else %}#333{% endif %}; text-decoration:none; border-radius:3px; font-size:12px;">
+                        Today
+                    </a>
+                    <a href="/?task_filter=due_soon"
+                       style="padding:4px 8px; background:{% if task_quick_filter == 'due_soon' %}#17a2b8{% else %}#e9ecef{% endif %}; color:{% if task_quick_filter == 'due_soon' %}white{% else %}#333{% endif %}; text-decoration:none; border-radius:3px; font-size:12px;">
+                        Due Soon
+                    </a>
+                </div>
+            </div>
+
+            <!-- Detailed Filters -->
+            <div style="font-size:13px;">
+                <select name="course_id" style="width:100%; padding:5px; margin-bottom:5px; border:1px solid #ddd; border-radius:3px; font-size:12px;">
+                    <option value="">All Courses</option>
+                    {% for course_id, course_name in courses.items() %}
+                        <option value="{{ course_id }}" {% if task_course_filter == course_id %}selected{% endif %}>
+                            {{ course_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <select name="priority" style="width:48%; padding:5px; margin-right:2%; border:1px solid #ddd; border-radius:3px; font-size:12px;">
+                    <option value="">All Priorities</option>
+                    <option value="high" {% if task_priority_filter == 'high' %}selected{% endif %}>High</option>
+                    <option value="medium" {% if task_priority_filter == 'medium' %}selected{% endif %}>Medium</option>
+                    <option value="low" {% if task_priority_filter == 'low' %}selected{% endif %}>Low</option>
+                </select>
+
+                <select name="status" style="width:48%; padding:5px; border:1px solid #ddd; border-radius:3px; font-size:12px;">
+                    <option value="">All Statuses</option>
+                    <option value="In Progress" {% if task_status_filter == 'In Progress' %}selected{% endif %}>In Progress</option>
+                    <option value="Not Started" {% if task_status_filter == 'Not Started' %}selected{% endif %}>Not Started</option>
+                    <option value="Completed" {% if task_status_filter == 'Completed' %}selected{% endif %}>Completed</option>
+                </select>
+
+                <button type="submit" style="width:100%; margin-top:5px; padding:5px; background:#28a745; color:white; border:none; border-radius:3px; cursor:pointer; font-size:12px;">
+                    Apply Filters
+                </button>
+            </div>
+        </form>
+
         <hr>
 
-        {% for task in tasks %}
-        <div style="margin-bottom:15px; padding:10px; background:#f8f9fa; border-radius:4px;">
-            <p style="margin:0;"><strong>{{ task.name }}</strong><br>
-            Due: {{ task.due_date.strftime('%b %d') }}<br>
-            Status: {{ task.status }}<br>
-            <a href="/?task_id={{ task.id }}" style="font-size:12px; color:#007bff;">
-                View Notes ({{ notes|selectattr('task_id', 'equalto', task.id)|list|length }})
-            </a>
-            </p>
-        </div>
-        {% endfor %}
+        <!-- Task List -->
+        {% if tasks %}
+            {% for task in tasks %}
+            <div style="margin-bottom:12px; padding:10px; background:#f8f9fa; border-radius:4px; border-left:4px solid {% if task.priority == 'high' %}#dc3545{% elif task.priority == 'medium' %}#ffc107{% else %}#28a745{% endif %};">
+                <p style="margin:0;">
+                    <strong>{{ task.name }}</strong><br>
+                    <small style="color:#6c757d;">
+                        Due: {{ task.due_date.strftime('%b %d') }} |
+                        {{ task.course_name }} |
+                        <span style="text-transform:uppercase; font-size:10px; padding:2px 4px; background:{% if task.priority == 'high' %}#dc3545{% elif task.priority == 'medium' %}#ffc107{% else %}#28a745{% endif %}; color:white; border-radius:2px;">
+                            {{ task.priority }}
+                        </span>
+                    </small><br>
+                    <small style="color:#6c757d;">Status: {{ task.status }}</small><br>
+                    <a href="/?task_id={{ task.id }}" style="font-size:11px; color:#007bff;">View Notes</a>
+                </p>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p style="color:#888; text-align:center; padding:20px;">No tasks match your filters</p>
+        {% endif %}
+
+        <small style="color:#6c757d; font-size:11px;">Showing {{ tasks|length }} of {{ all_tasks|length }} tasks</small>
     </div>
 
     <!-- Notes Card -->
@@ -110,7 +180,7 @@
         <!-- Add Note Form -->
         <form method="POST" action="/add-note" style="margin-top:15px;">
             <select name="task_id" style="padding:8px; border:1px solid #ddd; border-radius:4px; margin-bottom:8px; font-size:13px;">
-                {% for task in tasks %}
+                {% for task in all_tasks %}
                 <option value="{{ task.id }}">{{ task.name }}</option>
                 {% endfor %}
             </select>

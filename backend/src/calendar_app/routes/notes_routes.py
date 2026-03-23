@@ -1,5 +1,5 @@
 from flask import Blueprint, request, redirect, url_for
-from backend.src.calendar_app.logic.NoteManager import NoteManager
+from calendar_app.logic.NoteManager import NoteManager
 
 # Create blueprint
 notes_bp = Blueprint('notes', __name__)
