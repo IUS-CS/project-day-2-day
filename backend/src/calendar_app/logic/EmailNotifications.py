@@ -1,10 +1,4 @@
-"""
-Email notification service for Day-2-Day calendar application.
-
-This module provides functionality to send email notifications for tasks.
-Currently a skeleton/framework - email sending will be enabled once
-SMTP configuration and user email addresses are available.
-"""
+#Currently a skeleton/framework
 
 from typing import List, Dict, Optional
 from datetime import datetime
@@ -14,30 +8,13 @@ from calendar_app.utils.date_utils import format_date, days_until
 class EmailNotifications:
     """
     Handles email notifications for task reminders.
-
-    Note: This is currently a skeleton implementation. Email sending
-    requires SMTP configuration and user email addresses from the
-    authentication system.
     """
 
     def __init__(self, smtp_config: Optional[Dict] = None):
-        """
-        Initialize the email notification service.
-
-        Args:
-            smtp_config: Optional SMTP configuration dict with keys:
-                        'host', 'port', 'username', 'password', 'from_email'
-        """
         self.smtp_config = smtp_config or {}
         self.enabled = self._check_email_enabled()
 
     def _check_email_enabled(self) -> bool:
-        """
-        Check if email sending is properly configured.
-
-        Returns:
-            True if SMTP is configured, False otherwise
-        """
         required_keys = ['host', 'port', 'username', 'password', 'from_email']
         return all(key in self.smtp_config for key in required_keys)
 
@@ -174,34 +151,8 @@ class EmailNotifications:
         return body
 
     def _send_email(self, to_email: str, subject: str, body: str) -> bool:
-        """
-        Send an email via SMTP.
 
-        Args:
-            to_email: Recipient email address
-            subject: Email subject
-            body: Email body (plain text)
-
-        Returns:
-            True if sent successfully, False otherwise
-
-        Note: This is a skeleton. Actual implementation will use smtplib
-              when SMTP configuration is available.
-        """
         # TODO: Implement actual email sending when SMTP is configured
-        #
-        # import smtplib
-        # from email.mime.text import MIMEText
-        #
-        # msg = MIMEText(body)
-        # msg['Subject'] = subject
-        # msg['From'] = self.smtp_config['from_email']
-        # msg['To'] = to_email
-        #
-        # with smtplib.SMTP(self.smtp_config['host'], self.smtp_config['port']) as server:
-        #     server.starttls()
-        #     server.login(self.smtp_config['username'], self.smtp_config['password'])
-        #     server.send_message(msg)
 
         print(f"\n[EMAIL SKELETON] Email Details:")
         print(f"To: {to_email}")

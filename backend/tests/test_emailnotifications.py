@@ -51,7 +51,6 @@ class TestEmailNotificationService(unittest.TestCase):
         tasks = [self.due_soon_task]
         result = self.email_service.send_due_soon_notification('test@example.com', tasks)
 
-        # Should return True even without SMTP (skeleton mode)
         self.assertTrue(result)
 
     def test_send_overdue_notification(self):
@@ -132,11 +131,11 @@ class TestEmailNotificationService(unittest.TestCase):
         self.assertIn('Daily', preview['subject'])
 
     def test_email_not_enabled_without_config(self):
-        """Test that email is disabled without SMTP configuration."""
+        """Test that email is disabled"""
         self.assertFalse(self.email_service.enabled)
 
     def test_email_enabled_with_config(self):
-        """Test that email is enabled with proper SMTP configuration."""
+        """Test that email is enabled"""
         smtp_config = {
             'host': 'smtp.example.com',
             'port': 587,
