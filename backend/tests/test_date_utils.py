@@ -2,11 +2,9 @@ import sys
 import os
 import unittest
 from datetime import datetime, date, timedelta
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
-# Fix import path to find utils module
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-from utils.date_utils import format_date, is_overdue, days_until, parse_date
+from calendar_app.utils.date_utils import format_date, is_overdue, days_until, parse_date
 
 
 class TestFormatDate(unittest.TestCase):
