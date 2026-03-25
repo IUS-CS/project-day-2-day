@@ -3,9 +3,9 @@ import os
 import unittest
 
 # Fix import path to find utils module
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
-from utils.validators import validate_task_name, validate_priority, validate_email
+from calendar_app.utils.validators import validate_task_name, validate_priority, validate_email
 
 
 class TestValidateTaskName(unittest.TestCase):

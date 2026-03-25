@@ -4,6 +4,11 @@
 # Important note: Serves as the primary backend service for the application
 # Delivers frontend pages as well.
 
+from flask import Flask
+from calendar_app.routes.main_routes import main_bp
+from calendar_app.routes.notes_routes import notes_bp
+from calendar_app.routes.task_routes import task_bp
+
 from flask import Flask, render_template
 
 # Corrected imports — use calendar_app.* because THAT is your package
@@ -44,8 +49,12 @@ def create_app():
     app.register_blueprint(create_profile_api(profile_service))
 
     # Register blueprints (these contain the REAL index route)
+    # Home route
+
+    # Register blueprints
     app.register_blueprint(main_bp)
     app.register_blueprint(notes_bp)
+    app.register_blueprint(task_bp)
 
     # Calendar grid route
     @app.route("/calendar/grid")

@@ -2,6 +2,8 @@ from flask import Blueprint, request, redirect, url_for, render_template
 from calendar_app.logic.NoteManager import NoteManager
 from calendar_app.data.note_repo import NoteRepo
 from calendar_app.data.db import init_db
+from flask import Blueprint, request, redirect, url_for
+from calendar_app.logic.NoteManager import NoteManager
 
 notes_bp = Blueprint("notes", __name__)
 

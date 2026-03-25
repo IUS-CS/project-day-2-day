@@ -1,3 +1,5 @@
+from typing import List, Optional
+from datetime import datetime
 from calendar_app.models.Note import Note
 
 
