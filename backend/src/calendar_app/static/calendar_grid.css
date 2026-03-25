@@ -20,5 +20,15 @@
 .day.today .day-number{background:#2563eb;color:white;border-radius:999px;padding:2px 8px;display:inline-block;}
 .day:hover { background:#f8fafc; }
 .day.selected {outline: 2px solid #2563eb;outline-offset: -2px;border-radius: 12px;}
-
-
+.custom-task-panel{margin-top:20px;border:1px solid #e5e7eb;border-radius:14px;background:#fff;padding:16px;}
+.custom-task-panel h3{margin:0 0 12px;font-size:1rem;}
+.form-group{display:flex;flex-direction:column;margin-bottom:12px;}
+.form-group label{margin-bottom:4px;font-size:.9rem; font-weight:600; color:#374151;}
+.form-group input,
+.form-group select{border:1px solid #d1d5db;border-radius:10px;padding:8px 10px;font-size:.95rem;background:#fff;}
+.form-group input:focus,
+.form-group select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 2px rgba(37,99,235,.15);}
+.task-item{margin-top:10px;padding:10px;border:1px solid #e5e7eb;border-left:4px solid #2563eb;border-radius:10px;background:#f8fafc;}
+.task-item button{margin-top:8px;}
+.day-task-preview{margin-top:4px;font-size:.75rem;padding:4px 6px;background:#dbeafe;border:1px solid #bfdbfe;border-radius:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hidden{display:none}
