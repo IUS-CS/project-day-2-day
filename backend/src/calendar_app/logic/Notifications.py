@@ -1,6 +1,6 @@
 from typing import List, Dict
 from datetime import datetime, date
-from backend.src.calendar_app.utils.date_utils import is_overdue, days_until, format_date
+from calendar_app.utils.date_utils import is_overdue, days_until, format_date
 
 
 class Notifications:
