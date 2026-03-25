@@ -430,4 +430,7 @@ poetry.toml
 # LSP config files
 pyrightconfig.json
 
+#Calendar.db file
+Calendar.db
+
 # End of https://www.toptal.com/developers/gitignore/api/python,pycharm,flask,jetbrains+all

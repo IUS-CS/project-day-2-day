@@ -1,25 +1,19 @@
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
-import uuid
+
 
 @dataclass
 class User:
-    id: str
+    user_id: Optional[int]
+    username: str
     email: str
-    password_hash: str
-    role: str  # "user" or "admin"
-    created_at: datetime
-    updated_at: datetime
+    created_at: datetime = None
+    updated_at: datetime = None
 
-    @staticmethod
-    def create(email: str, password_hash: str, role: str = "user"):
+    def __post_init__(self):
         now = datetime.utcnow()
-        return User(
-            id=str(uuid.uuid4()),
-            email=email,
-            password_hash=password_hash,
-            role=role,
-            created_at=now,
-            updated_at=now
-        )
+        if self.created_at is None:
+            self.created_at = now
+        if self.updated_at is None:
+            self.updated_at = now

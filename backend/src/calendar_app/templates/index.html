@@ -134,18 +134,20 @@
 
         {% if notes %}
             {% for note in notes %}
-                <div style="margin-bottom:12px; padding:8px; background:#f8f9fa; border-radius:4px;" id="note-{{ note.id }}">
+                <div style="margin-bottom:12px; padding:8px; background:#f8f9fa; border-radius:4px;" id="note-{{ note.note_id }}">
                     <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                         <div style="flex:1;">
-                            <p style="margin:0; font-size:14px;" class="note-content-{{ note.id }}">• {{ note.content }}</p>
+                            <p style="margin:0; font-size:14px;" class="note-content-{{ note.note_id }}">• {{ note.content }}</p>
                             <small style="color:#6c757d;">Task #{{ note.task_id }}</small>
                         </div>
                         <div style="display:flex; gap:8px;">
-                            <button onclick="toggleEdit({{ note.id }})"
+                            <button onclick="toggleEdit({{ note.note_id }})"
                                     style="color:#007bff; background:none; border:none; cursor:pointer; font-size:12px; padding:2px;">
                                 ✎
                             </button>
-                            <a href="/delete-note/{{ note.id }}"
+
+                            <!-- FIX APPLIED HERE -->
+                            <a href="/delete-note/{{ note.note_id }}"
                                style="color:red; text-decoration:none; font-size:12px;">
                                 ✕
                             </a>
@@ -153,9 +155,9 @@
                     </div>
 
                     <!-- Hidden edit form -->
-                    <form method="POST" action="/edit-note/{{ note.id }}"
+                    <form method="POST" action="/edit-note/{{ note.note_id }}"
                           style="display:none; margin-top:8px;"
-                          class="edit-form-{{ note.id }}">
+                          class="edit-form-{{ note.note_id }}">
                         <input type="text"
                                name="content"
                                value="{{ note.content }}"
@@ -166,7 +168,7 @@
                             Save
                         </button>
                         <button type="button"
-                                onclick="toggleEdit({{ note.id }})"
+                                onclick="toggleEdit({{ note.note_id }})"
                                 style="padding:6px 10px; background:#6c757d; color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;">
                             Cancel
                         </button>

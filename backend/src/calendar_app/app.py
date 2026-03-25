@@ -11,11 +11,16 @@ from calendar_app.routes.task_routes import task_bp
 
 from flask import Flask, render_template
 
+# Corrected imports — use calendar_app.* because THAT is your package
+from calendar_app.routes.main_routes import main_bp
+from calendar_app.routes.notes_routes import notes_bp
+
 # Import blueprint factories
 from calendar_app.api.admin_api import create_admin_api
 from calendar_app.api.profile_api import create_profile_api
 
-# Import repositories
+# Import DB + repositories
+from calendar_app.data.db import init_db
 from calendar_app.data.user_repo import UserRepo
 from calendar_app.data.profile_repo import ProfileRepo
 
@@ -28,9 +33,12 @@ def create_app():
     """Create and configure the Flask application."""
     app = Flask(__name__)
 
-    # Instantiate repositories
-    user_repo = UserRepo()
-    profile_repo = ProfileRepo()
+    # Initialize database
+    SessionFactory = init_db()
+
+    # Instantiate repositories (DB-backed)
+    user_repo = UserRepo(SessionFactory)
+    profile_repo = ProfileRepo(SessionFactory)
 
     # Instantiate services
     admin_service = AdminService(user_repo, profile_repo)
@@ -40,6 +48,7 @@ def create_app():
     app.register_blueprint(create_admin_api(admin_service))
     app.register_blueprint(create_profile_api(profile_service))
 
+    # Register blueprints (these contain the REAL index route)
     # Home route
 
     # Register blueprints

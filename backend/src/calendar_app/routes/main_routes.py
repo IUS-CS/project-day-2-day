@@ -5,6 +5,9 @@ Blueprint for main page routes (dashboard, calendar).
 from flask import Blueprint, render_template, request
 from datetime import datetime, timedelta
 from calendar_app.logic.Notifications import Notifications
+
+# FIX: import the shared note_manager instance instead of get_note_manager
+from calendar_app.routes.notes_routes import note_manager
 from calendar_app.logic.TaskFilter import TaskFilter
 from calendar_app.routes.notes_routes import get_note_manager
 
@@ -57,6 +60,7 @@ SAMPLE_TASKS = [
 
 @main_bp.route("/")
 def index():
+    """Dashboard home page with notes and notifications."""
     """Dashboard home page with notes, tasks, and notifications."""
     # Get note manager from notes blueprint
     note_manager = get_note_manager()
@@ -73,6 +77,19 @@ def index():
     else:
         notes = note_manager.get_all_notes()
 
+    # Notifications
+    notifications = notification_service.get_notifications_for_tasks(SAMPLE_TASKS)
+    notification_counts = notification_service.count_notifications(SAMPLE_TASKS)
+
+    return render_template(
+        "index.html",
+        notes=notes,
+        tasks=SAMPLE_TASKS,
+        notifications=notifications,
+        notification_counts=notification_counts,
+        current_filter=task_filter,
+        search_query=search_query
+    )
     # Get task filter parameters
     task_course_filter = request.args.get("course_id", type=int)
     task_status_filter = request.args.get("status")
