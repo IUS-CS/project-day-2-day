@@ -1,17 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{% block title %}Day-2-Day{% endblock %}</title>
-
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
-<body>
-  {% block content %}{% endblock %}
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Day-2-Day{% endblock %}</title>
-
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     {% block head %}{% endblock %}
 </head>
 
@@ -29,7 +22,6 @@
 
     <!-- Main Content -->
     <div style="flex:1; padding:30px;">
-        <!-- Normal heading, NOT a block -->
         <h1 style="margin-top:0;">Day-2-Day App</h1>
         <hr>
 

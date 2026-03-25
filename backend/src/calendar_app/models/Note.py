@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional
-from backend.src.calendar_app.utils.validators import validate_note_content
+from calendar_app.utils.validators import validate_note_content
 
 
 class Note:

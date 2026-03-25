@@ -1,6 +1,6 @@
 from typing import List, Optional
 from datetime import datetime
-from backend.src.calendar_app.models.Note import Note
+from calendar_app.models.Note import Note
 
 
 class NoteManager:

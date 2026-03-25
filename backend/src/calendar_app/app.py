@@ -5,8 +5,9 @@
 # Delivers frontend pages as well.
 
 from flask import Flask
-from backend.src.calendar_app.routes.main_routes import main_bp
-from backend.src.calendar_app.routes.notes_routes import notes_bp
+from calendar_app.routes.main_routes import main_bp
+from calendar_app.routes.notes_routes import notes_bp
+from calendar_app.routes.task_routes import task_bp
 
 from flask import Flask, render_template
 
@@ -40,12 +41,11 @@ def create_app():
     app.register_blueprint(create_profile_api(profile_service))
 
     # Home route
-    @app.route("/")
-    def index():
-        return render_template("index.html")
+
     # Register blueprints
     app.register_blueprint(main_bp)
     app.register_blueprint(notes_bp)
+    app.register_blueprint(task_bp)
 
     # Calendar grid route
     @app.route("/calendar/grid")
