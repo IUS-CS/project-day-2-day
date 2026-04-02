@@ -1,0 +1,161 @@
+@startuml Day-2-Day Architecture
+
+title Day-2-Day Calendar Application Architecture
+
+package "Frontend" as FE {
+    [HTML Templates] as Templates
+    [CSS Styles] as CSS
+    [JavaScript] as JS
+}
+
+note right of FE
+    User interface layer
+    - HTML Templates: Jinja2 templates for rendering web pages
+    - CSS Styles: Styling for calendar grid and overall UI
+    - JavaScript: Client-side logic for calendar interactions
+end note
+
+package "Backend" as BE {
+    package "Routes" as Routes {
+        [Main Routes] as MainRoutes
+        [Notes Routes] as NotesRoutes
+        [Task Routes] as TaskRoutes
+    }
+
+    note right of Routes
+        Web route handlers
+        - Main Routes: Home page, calendar view
+        - Notes Routes: CRUD operations for notes
+        - Task Routes: Task management endpoints
+    end note
+
+    package "API" as API {
+        [Admin API] as AdminAPI
+        [Profile API] as ProfileAPI
+        [Assignments API] as AssignmentsAPI
+        [Courses API] as CoursesAPI
+        [Users API] as UsersAPI
+        [Hello API] as HelloAPI
+    }
+
+    note right of API
+        REST API endpoints
+        - Admin API: User management, system admin functions
+        - Profile API: User profile operations
+        - Assignments API: Canvas assignment synchronization
+        - Courses API: Course information retrieval
+        - Users API: User authentication and data
+        - Hello API: Basic health check endpoint
+    end note
+
+    package "Logic" as Logic {
+        [Admin Service] as AdminService
+        [Profile Service] as ProfileService
+        [Note Manager] as NoteManager
+        [Notifications] as Notifications
+        [Email Notifications] as EmailNotifications
+        [Task Filter] as TaskFilter
+    }
+
+    note right of Logic
+        Business logic layer
+        - Admin Service: User and profile administration
+        - Profile Service: Profile management operations
+        - Note Manager: Note creation, editing, organization
+        - Notifications: In-app notification system
+        - Email Notifications: Automated email reminders
+        - Task Filter: Task sorting and filtering logic
+    end note
+
+    package "Data" as Data {
+        [Database] as DB
+        [User Repository] as UserRepo
+        [Profile Repository] as ProfileRepo
+        [Note Repository] as NoteRepo
+    }
+
+    note right of Data
+        Data persistence layer
+        - Database: SQLite/PostgreSQL data storage
+        - User Repository: User data access patterns
+        - Profile Repository: Profile data operations
+        - Note Repository: Note storage and retrieval
+    end note
+
+    package "Canvas Integration" as Canvas {
+        [Canvas Client] as CanvasClient
+    }
+
+    note right of Canvas
+        External LMS integration
+        - Canvas Client: API client for Canvas LMS
+        Fetches assignments, courses, and user data
+    end note
+
+    package "Utils" as Utils {
+        [Auth] as Auth
+        [Validators] as Validators
+        [Date Utils] as DateUtils
+    }
+
+    note right of Utils
+        Utility functions
+        - Auth: Authentication and authorization helpers
+        - Validators: Input validation and sanitization
+        - Date Utils: Date parsing and manipulation
+    end note
+}
+
+package "External Services" as External {
+    [Canvas LMS API] as CanvasAPI
+    [Email Service] as EmailService
+}
+
+note right of External
+    Third-party integrations
+    - Canvas LMS API: Educational platform API
+    - Email Service: SMTP or service for notifications
+end note
+
+' Relationships
+FE --> BE : HTTP Requests
+MainRoutes --> Templates : Renders
+NotesRoutes --> NoteManager : Uses
+TaskRoutes --> TaskFilter : Uses
+
+AdminAPI --> AdminService : Uses
+ProfileAPI --> ProfileService : Uses
+AssignmentsAPI --> CanvasClient : Uses
+CoursesAPI --> CanvasClient : Uses
+
+AdminService --> UserRepo : Accesses
+AdminService --> ProfileRepo : Accesses
+ProfileService --> ProfileRepo : Accesses
+NoteManager --> NoteRepo : Accesses
+
+UserRepo --> DB : Persists
+ProfileRepo --> DB : Persists
+NoteRepo --> DB : Persists
+
+CanvasClient --> CanvasAPI : Calls
+EmailNotifications --> EmailService : Sends
+
+' Future Architecture (dashed lines)
+package "Future Enhancements" as Future {
+    [Mobile App] as Mobile
+    [Advanced Analytics] as Analytics
+    [Cloud Storage] as Cloud
+}
+
+note right of Future
+    Planned enhancements
+    - Mobile App: Native mobile application
+    - Advanced Analytics: Data insights and reporting
+    - Cloud Storage: Backup and multi-device sync
+end note
+
+Mobile -.-> BE : API Access
+Analytics -.-> Data : Data Analysis
+Cloud -.-> Data : Backup/Sync
+
+@enduml
