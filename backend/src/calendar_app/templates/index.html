@@ -49,6 +49,14 @@
                 </div>
             </div>
 
+         <!-- Show Completed Toggle -->
+            <div style="margin-bottom:10px;">
+                <label style="font-size:12px; display:flex; align-items:center; gap:5px;">
+                    <input type="checkbox" name="show_completed" value="true" {% if show_completed %}checked{% endif %} onchange="this.form.submit()">
+                    Show completed tasks
+                </label>
+            </div>
+
             <!-- Detailed Filters -->
             <div style="font-size:13px;">
                 <select name="course_id" style="width:100%; padding:5px; margin-bottom:5px; border:1px solid #ddd; border-radius:3px; font-size:12px;">
@@ -82,22 +90,40 @@
 
         <hr>
 
-        <!-- Task List -->
+         <!-- Task List -->
         {% if tasks %}
             {% for task in tasks %}
-            <div style="margin-bottom:12px; padding:10px; background:#f8f9fa; border-radius:4px; border-left:4px solid {% if task.priority == 'high' %}#dc3545{% elif task.priority == 'medium' %}#ffc107{% else %}#28a745{% endif %};">
-                <p style="margin:0;">
-                    <strong>{{ task.name }}</strong><br>
-                    <small style="color:#6c757d;">
-                        Due: {{ task.due_date.strftime('%b %d') }} |
-                        {{ task.course_name }} |
-                        <span style="text-transform:uppercase; font-size:10px; padding:2px 4px; background:{% if task.priority == 'high' %}#dc3545{% elif task.priority == 'medium' %}#ffc107{% else %}#28a745{% endif %}; color:white; border-radius:2px;">
-                            {{ task.priority }}
-                        </span>
-                    </small><br>
-                    <small style="color:#6c757d;">Status: {{ task.status }}</small><br>
-                    <a href="/?task_id={{ task.id }}" style="font-size:11px; color:#007bff;">View Notes</a>
-                </p>
+            <div style="margin-bottom:12px; padding:10px; background:{% if task.completed %}#e8f5e9{% else %}#f8f9fa{% endif %}; border-radius:4px; border-left:4px solid {% if task.completed %}#28a745{% elif task.priority == 'high' %}#dc3545{% elif task.priority == 'medium' %}#ffc107{% else %}#28a745{% endif %};">
+                <div style="display:flex; align-items:start; gap:10px;">
+                    <!-- Checkbox -->
+                    <a href="/toggle-task/{{ task.id }}" style="text-decoration:none; font-size:20px; line-height:1; cursor:pointer;">
+                        {% if task.completed %}
+                            ✅
+                        {% else %}
+                            ⬜
+                        {% endif %}
+                    </a>
+
+                    <!-- Task Info -->
+                    <div style="flex:1;">
+                        <p style="margin:0; {% if task.completed %}text-decoration:line-through; color:#666;{% endif %}">
+                            <strong>{{ task.name }}</strong><br>
+                            <small style="color:#6c757d;">
+                                Due: {{ task.due_date.strftime('%b %d') }} |
+                                {{ task.course_name }} |
+                                <span style="text-transform:uppercase; font-size:10px; padding:2px 4px; background:{% if task.priority == 'high' %}#dc3545{% elif task.priority == 'medium' %}#ffc107{% else %}#28a745{% endif %}; color:white; border-radius:2px;">
+                                    {{ task.priority }}
+                                </span>
+                            </small><br>
+                            {% if task.completed %}
+                                <small style="color:#28a745;">✓ Completed {% if task.completed_at %}{{ task.completed_at.strftime('%b %d at %I:%M %p') }}{% endif %}</small><br>
+                            {% else %}
+                                <small style="color:#6c757d;">Status: {{ task.status }}</small><br>
+                            {% endif %}
+                            <a href="/?task_id={{ task.id }}" style="font-size:11px; color:#007bff;">View Notes</a>
+                        </p>
+                    </div>
+                </div>
             </div>
             {% endfor %}
         {% else %}

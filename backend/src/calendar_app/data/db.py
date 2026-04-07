@@ -1,7 +1,9 @@
 # calendar_app/data/db.py
 from sqlalchemy import create_engine, text
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+Base = declarative_base()
 def init_db(url="sqlite:///calendar.db"):
     engine = create_engine(url, echo=False)
 
@@ -40,6 +42,15 @@ def init_db(url="sqlite:///calendar.db"):
             );
         """))
 
+        # Create completion table
+        conn.execute(text("""
+        CREATE TABLE IF NOT EXISTS task_completions (
+    id INTEGER PRIMARY KEY,
+    task_id INTEGER NOT NULL UNIQUE,
+    completed BOOLEAN NOT NULL DEFAULT 0,
+    completed_at DATETIME
+             );
+        """ ))
         conn.commit()
 
     return sessionmaker(bind=engine, expire_on_commit=False)
