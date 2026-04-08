@@ -4,7 +4,6 @@
 
 {% block content %}
 
-<!-- Notifications Banner (if any urgent) -->
 {% if notification_counts.overdue > 0 or notification_counts.due_today > 0 %}
 <div style="background:#fff3cd; border:1px solid #ffc107; padding:12px; border-radius:6px; margin-bottom:20px;">
     <strong>⚠️ You have urgent tasks!</strong>
@@ -19,14 +18,12 @@
 
 <div style="display:flex; gap:20px;">
 
-    <!-- Assignments Card with Filters -->
+    <!-- Assignments Card -->
     <div style="background:white; padding:20px; border:1px solid #ddd; width:33%; border-radius:6px;">
         <h3>Assignments</h3>
 
-        <!-- Task Filters -->
         <form method="GET" style="margin-bottom:15px; padding:10px; background:#f8f9fa; border-radius:4px;">
 
-            <!-- Quick Filters -->
             <div style="margin-bottom:10px;">
                 <strong style="font-size:13px;">Quick Filters:</strong><br>
                 <div style="display:flex; gap:5px; margin-top:5px;">
@@ -82,7 +79,8 @@
                     <option value="Completed" {% if task_status_filter == 'Completed' %}selected{% endif %}>Completed</option>
                 </select>
 
-                <button type="submit" style="width:100%; margin-top:5px; padding:5px; background:#28a745; color:white; border:none; border-radius:3px; cursor:pointer; font-size:12px;">
+                <button type="submit"
+                        style="width:100%; margin-top:5px; padding:5px; background:#28a745; color:white; border:none; border-radius:3px; cursor:pointer; font-size:12px;">
                     Apply Filters
                 </button>
             </div>
@@ -137,7 +135,6 @@
     <div style="background:white; padding:20px; border:1px solid #ddd; width:33%; border-radius:6px;">
         <h3>Notes</h3>
 
-        <!-- Search and Filter Bar -->
         <div style="margin-bottom:15px;">
             <form method="GET" style="display:flex; gap:5px;">
                 <input type="text"
@@ -171,8 +168,6 @@
                                     style="color:#007bff; background:none; border:none; cursor:pointer; font-size:12px; padding:2px;">
                                 ✎
                             </button>
-
-                            <!-- FIX APPLIED HERE -->
                             <a href="/delete-note/{{ note.note_id }}"
                                style="color:red; text-decoration:none; font-size:12px;">
                                 ✕
@@ -180,7 +175,6 @@
                         </div>
                     </div>
 
-                    <!-- Hidden edit form -->
                     <form method="POST" action="/edit-note/{{ note.note_id }}"
                           style="display:none; margin-top:8px;"
                           class="edit-form-{{ note.note_id }}">
@@ -205,7 +199,6 @@
             <p style="color:#888;">No notes found.</p>
         {% endif %}
 
-        <!-- Add Note Form -->
         <form method="POST" action="/add-note" style="margin-top:15px;">
             <select name="task_id" style="padding:8px; border:1px solid #ddd; border-radius:4px; margin-bottom:8px; font-size:13px;">
                 {% for task in all_tasks %}
@@ -245,7 +238,6 @@
             <p style="color:#888;">🎉 No urgent notifications!</p>
         {% endif %}
 
-        <!-- Notification Summary -->
         <div style="margin-top:15px; padding:10px; background:#e7f3ff; border-radius:4px; font-size:13px;">
             <strong>Summary:</strong><br>
             🔴 {{ notification_counts.overdue }} Overdue<br>

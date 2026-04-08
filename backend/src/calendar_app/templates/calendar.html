@@ -21,16 +21,7 @@
     </select>
   </div>
 
-  <div class="calendar-content">
-    <h2>Calendar</h2>
-    <p>Calendar UI will go here.</p>
-  </div>
-</div>
-
-<script src="{{ url_for('static', filename='calendar_background.js') }}"></script>
-
-<div>
-  <!-- Calendar Header -->
+  <!-- REAL CALENDAR UI -->
   <div class="cal-header">
     <button id="prevBtn" class="btn" type="button">←</button>
     <h2 id="monthLabel" class="month-label">Month YYYY</h2>
@@ -39,17 +30,14 @@
     <button id="todayBtn" class="btn" type="button">Today</button>
   </div>
 
-  <!-- Weekday Row -->
   <div class="weekday-row">
     <div class="weekday">Sun</div><div class="weekday">Mon</div><div class="weekday">Tue</div>
     <div class="weekday">Wed</div><div class="weekday">Thu</div><div class="weekday">Fri</div>
     <div class="weekday">Sat</div>
   </div>
 
-  <!-- Calendar Grid -->
   <div id="grid" class="month-grid"></div>
 
-  <!-- Details Panel -->
   <div class="details">
     <h3 class="details-title">Selected Day</h3>
     <div id="detailsBody" class="details-body">Click a day to view events.</div>
@@ -88,6 +76,7 @@
       <button type="submit" class="btn">Add Task</button>
     </form>
   </div>
+
 </div>
 {% endblock %}
 
