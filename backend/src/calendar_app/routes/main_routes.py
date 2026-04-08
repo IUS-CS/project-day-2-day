@@ -2,17 +2,19 @@
 Blueprint for main page routes (dashboard, calendar).
 """
 
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, redirect, url_for
 from datetime import datetime, timedelta
-from calendar_app.logic.Notifications import Notifications
 
-# FIX: import the shared note_manager instance instead of get_note_manager
+from calendar_app.logic.Notifications import Notifications
 from calendar_app.routes.notes_routes import note_manager
 from calendar_app.logic.TaskFilter import TaskFilter
-
-# Create blueprint
+from calendar_app.data.task_completion_repo import TaskCompletionRepo
+from calendar_app.data.db import init_db
+#Create blueprint
 main_bp = Blueprint('main', __name__)
 
+SessionFactory = init_db()
+task_completion_repo = TaskCompletionRepo(SessionFactory)
 # Initialize notification service
 notification_service = Notifications(due_soon_threshold=3)
 
@@ -78,6 +80,7 @@ def index():
     task_status_filter = request.args.get("status")
     task_priority_filter = request.args.get("priority")
     task_quick_filter = request.args.get("task_filter")  # 'overdue', 'due_soon', 'today'
+    show_completed = request.args.get("show_completed", "false") == "true"
 
     # Apply task filters
     task_filter = TaskFilter(SAMPLE_TASKS)
@@ -100,6 +103,13 @@ def index():
         task_filter.sort_by_due_date()
         filtered_tasks = task_filter.get_results()
 
+    # Add completion status to tasks
+    filtered_tasks = task_completion_repo.add_completion_status_to_tasks(filtered_tasks)
+
+    # Filter out completed tasks unless show_completed is true
+    if not show_completed:
+        filtered_tasks = [t for t in filtered_tasks if not t.get('completed', False)]
+
     # Get all unique courses for filter dropdown
     courses = {}
     for task in SAMPLE_TASKS:
@@ -111,19 +121,45 @@ def index():
     notifications = notification_service.get_notifications_for_tasks(SAMPLE_TASKS)
     notification_counts = notification_service.count_notifications(SAMPLE_TASKS)
 
+    # Get completion stats
+    completion_stats = task_completion_repo.get_stats([task["id"] for task in SAMPLE_TASKS])
+
     return render_template("index.html",
                            notes=notes,
                            tasks=filtered_tasks,
-                           all_tasks=SAMPLE_TASKS,  # For note task selection
+                           all_tasks=task_completion_repo.add_completion_status_to_tasks(SAMPLE_TASKS),  # For note task selection
                            courses=courses,
                            notifications=notifications,
                            notification_counts=notification_counts,
+                           completion_stats=completion_stats,
                            current_filter=note_task_filter,
                            search_query=search_query,
                            task_course_filter=task_course_filter,
                            task_status_filter=task_status_filter,
                            task_priority_filter=task_priority_filter,
-                           task_quick_filter=task_quick_filter)
+                           task_quick_filter=task_quick_filter,
+                           show_completed=show_completed)
+
+
+@main_bp.route("/toggle-task/<int:task_id>")
+def toggle_task_completion(task_id):
+    """Toggle a task's completion status."""
+    task_completion_repo.toggle(task_id)
+    return redirect(url_for('main.index'))
+
+
+@main_bp.route("/complete-task/<int:task_id>")
+def complete_task(task_id):
+    """Mark a task as complete."""
+    task_completion_repo.mark_complete(task_id)
+    return redirect(url_for('main.index'))
+
+
+@main_bp.route("/incomplete-task/<int:task_id>")
+def incomplete_task(task_id):
+    """Mark a task as incomplete."""
+    task_completion_repo.mark_incomplete(task_id)
+    return redirect(url_for('main.index'))
 
 
 @main_bp.route("/calendar")
