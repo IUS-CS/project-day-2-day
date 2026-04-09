@@ -1,8 +1,11 @@
 from fastapi import FastAPI
 from calendar_app.api.hello_api import router as hello_router
+from calendar_app.api.assignments import router as assignments_router
 
 app = FastAPI()
+
 app.include_router(hello_router, prefix="/api")
+app.include_router(assignments_router)
 
 if __name__ == "__main__":
     import uvicorn
