@@ -1,0 +1,39 @@
+@startuml
+title Database Schema
+
+entity User {
+  * id : INTEGER
+  --
+  email : TEXT
+  password_hash : TEXT
+}
+
+entity Event {
+  * id : INTEGER
+  --
+  user_id : INTEGER
+  title : TEXT
+  start : DATETIME
+  end : DATETIME
+}
+
+entity Task {
+  * id : INTEGER
+  --
+  user_id : INTEGER
+  title : TEXT
+  due_date : DATETIME
+  completed : BOOLEAN
+}
+
+entity Organization {
+  * id : INTEGER
+  --
+  name : TEXT
+}
+
+User ||--o{ Event : owns
+User ||--o{ Task : owns
+Organization ||--o{ User : includes
+
+@enduml

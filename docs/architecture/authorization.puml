@@ -1,0 +1,22 @@
+@startuml
+title Authentication Flow
+
+actor User
+participant "Frontend" as FE
+participant "Auth API" as API
+participant "AuthService" as Service
+participant "UserRepository" as Repo
+database "calendar.db" as DB
+
+User -> FE : Submit login form
+FE -> API : POST /auth/login
+API -> Service : authenticate(email, password)
+Service -> Repo : findUserByEmail()
+Repo -> DB : SELECT * FROM users WHERE email=?
+DB --> Repo : user record
+Service -> Service : verify password
+Service --> API : token
+API --> FE : { token }
+FE --> User : Logged in
+
+@enduml

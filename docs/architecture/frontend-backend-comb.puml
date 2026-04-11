@@ -1,0 +1,22 @@
+@startuml
+title Frontend–Backend Interaction (Fetch Events)
+
+actor User
+participant "React UI" as UI
+participant "Calendar API" as API
+participant "CalendarService" as Service
+participant "EventRepository" as Repo
+database "calendar.db" as DB
+
+User -> UI : Open Calendar Page
+UI -> API : GET /calendar/events
+API -> Service : fetchEvents()
+Service -> Repo : getEventsByUser()
+Repo -> DB : SELECT * FROM events WHERE user_id=?
+DB --> Repo : results
+Repo --> Service : events
+Service --> API : events
+API --> UI : JSON response
+UI --> User : Render events
+
+@enduml

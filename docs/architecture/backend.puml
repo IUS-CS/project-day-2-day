@@ -1,0 +1,17 @@
+@startuml
+title Backend 
+
+package "Backend" { 
+  package "calendar_app"{
+    [routes] --> [services]
+    [services] --> [repositories]
+    [repositories] --> [database]
+    [validators]
+    [date_utils]
+    [email_notifications]
+  }
+[routes] --> [validators]
+[services] --> [email_notifications]
+}
+
+@enduml

@@ -1,0 +1,18 @@
+@startuml
+title API Routing Flow
+
+package "API Routes" {
+  [AuthController] --> [AuthService]
+  [CalendarController] --> [CalendarService]
+  [TaskController] --> [TaskService]
+  [ProfileController] --> [ProfileService]
+  [AdminController] --> [AdminService]
+}
+
+[AuthService] --> [UserRepository]
+[CalendarService] --> [EventRepository]
+[TaskService] --> [TaskRepository]
+[ProfileService] --> [UserRepository]
+[AdminService] --> [OrganizationRepository]
+
+@enduml

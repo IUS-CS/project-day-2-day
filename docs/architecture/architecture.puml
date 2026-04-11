@@ -1,0 +1,13 @@
+@startuml
+title System Architecture Overview
+
+!include backend-overview.puml
+!include domain-model.puml
+!include api-flow.puml
+!include database-schema.puml
+!include frontend-structure.puml
+!include frontend-backend-sequence.puml
+!include auth-flow.puml
+!include integrations.puml
+
+@enduml
