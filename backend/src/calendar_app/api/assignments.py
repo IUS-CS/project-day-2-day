@@ -12,6 +12,11 @@ ASSIGNMENTS = [
     Assignment(name="Assignment 1", description="Show all work")
 ]
 
-@router.get("/assignments", response_model=List[Assignment])
+@router.get("", response_model=List[Assignment])
 def list_assignments():
     return ASSIGNMENTS
+
+@router.post("", response_model=Assignment)
+def create_assignment(assignment: Assignment):
+    ASSIGNMENTS.append(assignment)
+    return assignment
