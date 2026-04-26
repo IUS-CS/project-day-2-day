@@ -1,0 +1,20 @@
+@startuml
+title External Integrations
+
+package "Backend" {
+  [CalendarService]
+  [TaskService]
+  [NotificationService]
+}
+
+package "External APIs" {
+  [Canvas API]
+  [Microsoft Graph API]
+  [Email Provider]
+}
+
+[CalendarService] --> [Microsoft Graph API] : sync events
+[TaskService] --> [Canvas API] : fetch assignments
+[NotificationService] --> [Email Provider] : send reminders
+
+@enduml

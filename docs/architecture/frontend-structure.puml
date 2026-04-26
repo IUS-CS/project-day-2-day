@@ -1,0 +1,36 @@
+@startuml
+title Frontend Component Architecture
+
+package "Frontend (React)" {
+  [App.jsx] --> [Router]
+  [Router] --> [CalendarPage]
+  [Router] --> [TasksPage]
+  [Router] --> [ProfilePage]
+  [Router] --> [AdminPage]
+
+  package "Components" {
+    [CalendarView]
+    [TaskList]
+    [TaskItem]
+    [ProfileForm]
+    [AdminPanel]
+  }
+
+  package "API Layer" {
+    [api/calendar.js]
+    [api/tasks.js]
+    [api/auth.js]
+  }
+}
+
+[CalendarPage] --> [CalendarView]
+[TasksPage] --> [TaskList]
+[TaskList] --> [TaskItem]
+[ProfilePage] --> [ProfileForm]
+[AdminPage] --> [AdminPanel]
+
+[CalendarPage] --> [api/calendar.js]
+[TasksPage] --> [api/tasks.js]
+[ProfilePage] --> [api/auth.js]
+
+@enduml
