@@ -9,10 +9,10 @@ class NoteManager:
     def __init__(self, note_repo):
         self.note_repo = note_repo
 
-    def create_note(self, task_id: int, content: str) -> Note:
+    def create_note(self, task_id: int, content: str, category: str = "General") -> Note:
         """Create a new note and save it."""
         next_id = self.note_repo.get_next_id()  # Always fetch fresh ID
-        note = Note(task_id=task_id, content=content, note_id=next_id)
+        note = Note(task_id=task_id, content=content, note_id=next_id, category=category)
         return self.note_repo.save(note)
 
     def update_note(self, note_id: int, new_content: str) -> Note:
@@ -40,3 +40,8 @@ class NoteManager:
         query = query.lower()
         notes = self.note_repo.get_all()
         return [n for n in notes if query in n.content.lower()]
+
+    def get_notes_for_category(self, category: str):
+        category = category.strip().lower()
+        notes = self.note_repo.get_all()
+        return [n for n in notes if n.category.lower() == category]

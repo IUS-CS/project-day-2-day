@@ -23,7 +23,8 @@ def list_notes():
 def add_note():
     content = request.form.get("content", "")
     task_id = int(request.form.get("task_id", 1))
-    note_manager.create_note(task_id=task_id, content=content)
+    category = request.form.get("category", "General")
+    note_manager.create_note(task_id=task_id, content=content, category=category)
     return redirect(url_for("main.index"))
 
 

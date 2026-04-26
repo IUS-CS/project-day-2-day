@@ -15,10 +15,15 @@ def init_db(url="sqlite:///calendar.db"):
                 note_id INTEGER PRIMARY KEY,
                 task_id INTEGER NOT NULL,
                 content TEXT NOT NULL,
+                category TEXT NOT NULL DEFAULT 'General',
                 created_at TEXT NOT NULL,
                 updated_at TEXT NOT NULL
             );
         """))
+        # Backfill older databases that predate note categories.
+        notes_columns = [row[1] for row in conn.execute(text("PRAGMA table_info(notes)"))]
+        if "category" not in notes_columns:
+            conn.execute(text("ALTER TABLE notes ADD COLUMN category TEXT NOT NULL DEFAULT 'General'"))
 
         # Create users table
         conn.execute(text("""
@@ -51,6 +56,22 @@ def init_db(url="sqlite:///calendar.db"):
     completed_at DATETIME
              );
         """ ))
+
+        conn.execute(text("""
+            CREATE TABLE IF NOT EXISTS custom_notifications (
+                id INTEGER PRIMARY KEY,
+                message TEXT NOT NULL,
+                level TEXT NOT NULL DEFAULT 'info',
+                due_date TEXT,
+                is_active BOOLEAN NOT NULL DEFAULT 1,
+                created_at TEXT NOT NULL
+            );
+        """))
+        custom_notification_columns = [
+            row[1] for row in conn.execute(text("PRAGMA table_info(custom_notifications)"))
+        ]
+        if "due_date" not in custom_notification_columns:
+            conn.execute(text("ALTER TABLE custom_notifications ADD COLUMN due_date TEXT"))
         conn.commit()
 
     return sessionmaker(bind=engine, expire_on_commit=False)

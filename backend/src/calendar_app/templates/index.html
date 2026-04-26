@@ -148,7 +148,26 @@
                 </button>
             </form>
 
-            {% if current_filter or search_query %}
+            <form method="GET" style="display:flex; gap:5px; margin-top:8px;">
+                <select name="note_category" style="flex:1; padding:6px; border:1px solid #ddd; border-radius:4px; font-size:13px;">
+                    <option value="">All Categories</option>
+                    {% for category in note_categories %}
+                        <option value="{{ category }}" {% if note_category_filter == category %}selected{% endif %}>{{ category }}</option>
+                    {% endfor %}
+                </select>
+                <select name="note_course_id" style="flex:1; padding:6px; border:1px solid #ddd; border-radius:4px; font-size:13px;">
+                    <option value="">All Classes</option>
+                    {% for course_id, course_name in courses.items() %}
+                        <option value="{{ course_id }}" {% if note_course_filter == course_id %}selected{% endif %}>{{ course_name }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit"
+                        style="padding:6px 12px; background:#007bff; color:white; border:none; border-radius:4px; cursor:pointer; font-size:13px;">
+                    Filter
+                </button>
+            </form>
+
+            {% if current_filter or search_query or note_category_filter or note_course_filter %}
                 <a href="/" style="font-size:12px; color:#007bff; margin-top:5px; display:inline-block;">Clear filters</a>
             {% endif %}
         </div>
@@ -161,7 +180,7 @@
                     <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                         <div style="flex:1;">
                             <p style="margin:0; font-size:14px;" class="note-content-{{ note.note_id }}">• {{ note.content }}</p>
-                            <small style="color:#6c757d;">Task #{{ note.task_id }}</small>
+                            <small style="color:#6c757d;">Task #{{ note.task_id }} | Category: {{ note.category }}</small>
                         </div>
                         <div style="display:flex; gap:8px;">
                             <button onclick="toggleEdit({{ note.note_id }})"
@@ -205,6 +224,11 @@
                 <option value="{{ task.id }}">{{ task.name }}</option>
                 {% endfor %}
             </select>
+            <input type="text"
+                   name="category"
+                   placeholder="Category (e.g., Class Notes, Homework)"
+                   value="General"
+                   style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px; margin-bottom:8px; font-size:13px;">
             <div style="display:flex; gap:5px;">
                 <input type="text"
                        name="content"
@@ -222,16 +246,49 @@
     <!-- Notifications Card -->
     <div style="background:white; padding:20px; border:1px solid #ddd; width:33%; border-radius:6px;">
         <h3>Notifications</h3>
+        <form method="POST" action="/add-custom-notification" style="margin-bottom:12px; display:flex; gap:6px; flex-wrap:wrap;">
+            <input type="text"
+                   name="message"
+                   placeholder="Add custom notification..."
+                   style="flex:1; min-width:160px; padding:6px; border:1px solid #ddd; border-radius:4px; font-size:13px;"
+                   required>
+            <select name="level" style="padding:6px; border:1px solid #ddd; border-radius:4px; font-size:13px;">
+                <option value="info">Info</option>
+                <option value="warning">Warning</option>
+                <option value="urgent">Urgent</option>
+            </select>
+            <input type="date"
+                   name="due_date"
+                   style="padding:6px; border:1px solid #ddd; border-radius:4px; font-size:13px;">
+            <button type="submit"
+                    style="padding:6px 10px; background:#007bff; color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;">
+                Add
+            </button>
+        </form>
         <hr>
 
         {% if notifications %}
             {% for notification in notifications %}
                 <div style="padding:10px; margin-bottom:10px; background:#f8f9fa; border-left:4px solid {{ notification.color }}; border-radius:4px;">
-                    <p style="margin:0; font-size:14px;">
+                    <p style="margin:0; font-size:14px; display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                        <span>
                         <span style="font-size:16px;">{{ notification.icon }}</span>
                         {{ notification.message }}
+                        </span>
+                        {% if notification.is_custom %}
+                            <a href="/dismiss-custom-notification/{{ notification.id }}" style="text-decoration:none; color:#6c757d; font-size:12px;">Dismiss</a>
+                        {% endif %}
                     </p>
-                    <small style="color:#6c757d;">{{ notification.task.due_date.strftime('%b %d, %Y') }}</small>
+                    <small style="color:#6c757d;">
+                        {% if notification.is_custom %}
+                            Custom {{ notification.level|capitalize }}
+                            {% if notification.task.due_date %}
+                                | Due {{ notification.task.due_date.strftime('%b %d, %Y') }}
+                            {% endif %}
+                        {% else %}
+                            {{ notification.task.due_date.strftime('%b %d, %Y') }}
+                        {% endif %}
+                    </small>
                 </div>
             {% endfor %}
         {% else %}

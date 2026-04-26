@@ -54,6 +54,10 @@ class Notifications:
         notifications = []
         due_date = task['due_date']
 
+        # Completed tasks should not produce due-date notifications.
+        if task.get("completed"):
+            return notifications
+
         # Skip if no due date
         if not due_date:
             return notifications
@@ -105,7 +109,12 @@ class Notifications:
         Returns:
             List of overdue tasks
         """
-        return [task for task in tasks if task.get('due_date') and is_overdue(task['due_date'])]
+        return [
+            task for task in tasks
+            if not task.get("completed")
+            and task.get('due_date')
+            and is_overdue(task['due_date'])
+        ]
 
     def get_due_soon_tasks(self, tasks: List[Dict]) -> List[Dict]:
         """
@@ -118,7 +127,8 @@ class Notifications:
             List of tasks due soon
         """
         return [task for task in tasks
-                if task.get('due_date')
+                if not task.get("completed")
+                and task.get('due_date')
                 and 0 < days_until(task['due_date']) <= self.due_soon_threshold]
 
     def get_due_today_tasks(self, tasks: List[Dict]) -> List[Dict]:
@@ -132,7 +142,8 @@ class Notifications:
             List of tasks due today
         """
         return [task for task in tasks
-                if task.get('due_date')
+                if not task.get("completed")
+                and task.get('due_date')
                 and days_until(task['due_date']) == 0]
 
     def count_notifications(self, tasks: List[Dict]) -> Dict[str, int]:

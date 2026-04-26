@@ -21,13 +21,14 @@ class NoteRepo:
         session.execute(
             text("""
                 INSERT OR REPLACE INTO notes 
-                (note_id, task_id, content, created_at, updated_at)
-                VALUES (:note_id, :task_id, :content, :created_at, :updated_at)
+                (note_id, task_id, content, category, created_at, updated_at)
+                VALUES (:note_id, :task_id, :content, :category, :created_at, :updated_at)
             """),
             {
                 "note_id": note.note_id,
                 "task_id": note.task_id,
                 "content": note.content,
+                "category": note.category,
                 "created_at": note.created_at.isoformat(),
                 "updated_at": note.updated_at.isoformat(),
             },
@@ -52,6 +53,7 @@ class NoteRepo:
             task_id=row["task_id"],
             content=row["content"],
             note_id=row["note_id"],
+            category=row.get("category", "General"),
         )
 
     def delete(self, note_id: int) -> None:
@@ -75,6 +77,7 @@ class NoteRepo:
                 task_id=row["task_id"],
                 content=row["content"],
                 note_id=row["note_id"],
+                category=row.get("category", "General"),
             )
             for row in rows
         ]

@@ -13,7 +13,7 @@ class Note:
         content: The text content of the note
     """
 
-    def __init__(self, task_id: int, content: str, note_id: Optional[int] = None):
+    def __init__(self, task_id: int, content: str, note_id: Optional[int] = None, category: str = "General"):
         """
         Initialize a new Note.
 
@@ -28,6 +28,7 @@ class Note:
         self.note_id = note_id        # <-- FIXED: was self.id
         self.task_id = task_id
         self.content = content.strip()
+        self.category = category.strip() if category else "General"
         self.created_at = datetime.now()
         self.updated_at = datetime.now()
 
@@ -44,6 +45,7 @@ class Note:
             'id': self.note_id,  # <-- FIXED to match new attribute
             'task_id': self.task_id,
             'content': self.content,
+            'category': self.category,
             'created_at': self.created_at.isoformat(),
             'updated_at': self.updated_at.isoformat()
         }
@@ -54,7 +56,8 @@ class Note:
         note = cls(
             task_id=data['task_id'],
             content=data['content'],
-            note_id=data.get('id')  # <-- FIXED to match new attribute
+            note_id=data.get('id'),  # <-- FIXED to match new attribute
+            category=data.get('category', 'General')
         )
 
         if 'created_at' in data:
