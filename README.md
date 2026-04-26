@@ -40,7 +40,7 @@ Day-2-Day helps students stay organized by integrating with Canvas LMS to track 
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/evodolaz/project-day-2-day.git
+   https://github.com/IUS-CS/project-day-2-day.git
    cd project-day-2-day
    ```
 
@@ -54,8 +54,12 @@ Day-2-Day helps students stay organized by integrating with Canvas LMS to track 
    cd backend/src
    py -m calendar_app.app
    ```
+   OR
+    ```bash
+    run day2day.bat file directly
+    ```
 
-4. **Open in browser:**
+5. **Open in browser:**
    ```
    http://localhost:5000
    ```
